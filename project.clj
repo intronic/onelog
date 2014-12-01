@@ -1,4 +1,4 @@
-(defproject onelog "0.4.5"
+(defproject intronic/onelog "0.4.6"
   :description "Batteries-included logging for Clojure"
   :url "https://github.com.com/pjlegato/onelog"
   :license {:name "Eclipse Public License"
