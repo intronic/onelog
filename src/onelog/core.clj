@@ -32,7 +32,7 @@ TODO: Add profiling methods (i.e. run a function and log how long it took)
   (let [colors (if (coll? colors)
                  colors
                  (vector colors))]
-    (apply ansi/style (apply str data) colors)))
+    (apply ansi/style (apply println-str data) colors)))
 
 (def ^:dynamic *logfile* "log/clojure.log")
 (def ^:dynamic *loglevel* :info)
@@ -137,36 +137,36 @@ for itself when used separately.
 
 ;; Unfortunately, log/warn, log/error, etc. are all macros, which
 ;; makes generating higher order functions on them annoying. So we convert them to functions.
-(defn trace 
+(defn trace
   [& forms]
-  (log/trace (apply str forms)))
+  (log/trace (apply println-str forms)))
 
 (defn debug
   [& forms]
-  (log/debug (apply str forms)))
+  (log/debug (apply println-str forms)))
 
 (defn info
   [& forms]
-  (log/info (apply str forms)))
+  (log/info (apply println-str forms)))
 
 (defn warn
-  [& forms] 
+  [& forms]
   (log/warn (apply color [:bright :yellow] forms)))
 
 (defn error
-  [& forms] 
+  [& forms]
   (log/error (apply color [:bright :red] forms)))
 
 (defn fatal
-  [& forms] 
+  [& forms]
   (log/fatal (apply color [:bright :red] forms)))
 
 
 (defmacro spy
   [& forms]
   `(let [result# (do ~@forms)]
-     (debug "[SPY] Evaluated forms: " (color [:bright :white] '~@forms) 
-            " and got: " (color [:magenta] result#) 
+     (debug "[SPY] Evaluated forms: " (color [:bright :white] '~@forms)
+            " and got: " (color [:magenta] result#)
             " which is a: " (class result#))
      result#))
 
@@ -191,7 +191,7 @@ for itself when used separately.
     `(def ~fn-name
        (fn
          [& forms#]
-         (let [forms# (apply str forms#)]
+         (let [forms# (apply println-str forms#)]
            (println-stderr (str "[" (.toUpperCase (str '~logger-sym)) "] " forms#))
            (~logger-sym forms#))))))
 
@@ -207,8 +207,8 @@ for itself when used separately.
   "Like spy, but copies messages to STDERR in addition to logging them."
   [& forms]
   `(let [result#  (do ~@forms)
-         message# (str "[SPY] Evaluated forms: " (color [:bright :white] '~@forms) 
-                       " and got: " (color [:magenta] result#) 
+         message# (str "[SPY] Evaluated forms: " (color [:bright :white] '~@forms)
+                       " and got: " (color [:magenta] result#)
                        " which is a: " (class result#))]
      (println-stderr message#)
      (debug message#)))
